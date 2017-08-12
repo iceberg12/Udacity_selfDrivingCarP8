@@ -68,10 +68,10 @@ In the above approach, we assume that we use nearest neighbor seach for landmark
 |                               | Inefficient to calculate                                      | (4) |
 |                               | Does not take different sensor uncertainties into account     | (5) |
 
-...(1) Because one map landmark could be really close to multiple measurements (particles), thus it is unclear which particle corresponds to this map landmark.
-...(2)(5) Sensor noise is in different direction, for example, vertical, nearest neighbor can pick a wrong particle for a landmark with this noise. The same thing can happen for Lidar measurement with high accuracy in bearing but less in range.
-...(3) If there is an error in the car position estimation (-1 m to the right), this error will be introduced systematically to all particle measurements through the position transformation at the beginning of Step 3 (shift all particles to the right). Nearest neighbor does not take care of this pattern but search nearest landmarks for individual particles.
-...(4) Complexity is O(mn) where m, n are the numbers of landmarks and particles.
+⋅⋅⋅(1) Because one map landmark could be really close to multiple measurements (particles), thus it is unclear which particle corresponds to this map landmark.⋅⋅
+⋅⋅⋅(2)(5) Sensor noise is in different direction, for example, vertical, nearest neighbor can pick a wrong particle for a landmark with this noise. The same thing can happen for Lidar measurement with high accuracy in bearing but less in range.⋅⋅
+⋅⋅⋅(3) If there is an error in the car position estimation (-1 m to the right), this error will be introduced systematically to all particle measurements through the position transformation at the beginning of Step 3 (shift all particles to the right). Nearest neighbor does not take care of this pattern but search nearest landmarks for individual particles.⋅⋅
+⋅⋅⋅(4) Complexity is O(mn) where m, n are the numbers of landmarks and particles.⋅⋅
 
 ## Implementation
 The directory structure of this repository is as follows:
