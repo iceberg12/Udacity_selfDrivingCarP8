@@ -48,8 +48,13 @@ The iterative steps to use the particle filter algorithm to track the car positi
 3. Update the particle weights and resample particles.
 4. Calculate and output the average weighted error of the particle filter over all time steps so far.
 
-Let's look at Steps 1, 2 and 3 in details.
+Let's look at Steps 1 and 3 in details.
 
+In Step 1, beside initializing the car position, we also need to initialize the particles around the GPS-identified position with a predefined Gaussian distribution for x, y positions and orientation. Once initialized, we predict the next position using time, velocity and yaw rate. Remember to check if the yaw rate is too small to avoid Number Overflow.
+
+For Step 3, let's look at how particles, acting as satellites around the car, evolves to estimate the locations of surrounding landmarks.
+
+![alt text][particles]
 
 
 ## Implementation
