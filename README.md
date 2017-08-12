@@ -56,6 +56,18 @@ For Step 3, let's look at how particles, acting as satellites around the car, ev
 
 ![alt text][particles]
 
+First, in order to relate particles to the global map, one needs to transform the particle positions observed by the car into particle positions in the global map. This can be done with coordinate transformation and rotation. Second, we want to know which landmark a particular particle is observing by finding the shortest distance from all landmarks to the particle. Certainly, if we know the sensor range of our car, we can narrow down the search to only localized landmarks near the car. Third, we want to ask ourselves, how much we can trust each particle. The weightage is done by comparing how accuracy (how close) each particle can estimate its landmarks.
+
+In the above approach, we assume that we use nearest neighbor seach for landmarks. However, this method can have procs and cons, detailed in the following table. You can use the particle map above to make sense about these pros and cons.
+
+| Pros                          | Cons          |
+| -------------                 |:-------------:|
+| Easy to understand            | Not robust to high density of measurements or map landmarks   |
+| Easy to implement             | Not robust to sensor noise                                    |
+| Work well in many situation   | Not robust in position estimates                              |
+|                               | Inefficient to calculate                                      |
+|                               | Does not take different sensor uncertainties into account     |
+
 
 ## Implementation
 The directory structure of this repository is as follows:
