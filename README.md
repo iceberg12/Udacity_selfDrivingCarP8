@@ -43,14 +43,14 @@ The iterative steps to use the particle filter algorithm to track the car positi
 
 ![alt text][overview]
 
-1. Initialize the car position with noisy position data from the GPS. If already initialized, predict the vehicle's next state from previous (noiseless control) data.
+1. Initialize the car position and all particle position (say, 50 particles) with noisy position data from the GPS. If already initialized, predict the vehicle's next state plus all the particles from the previous (noiseless control) data and estimated speed and yaw rate.
 2. Receive landmarks observation data from the simulator.
 3. Update the particle weights and resample particles.
 4. Calculate and output the average weighted error of the particle filter over all time steps so far.
 
 Let's look at Steps 1 and 3 in details.
 
-In Step 1, beside initializing the car position, we also need to initialize the particles around the GPS-identified position with a predefined Gaussian distribution for x, y positions and orientation. Once initialized, we predict the next position using time, velocity and yaw rate. Remember to check if the yaw rate is too small to avoid Number Overflow.
+In Step 1, beside initializing the car position, we also need to initialize the particles around the GPS-identified position with a predefined Gaussian distribution for x, y positions and orientation. Once initialized, we predict the next position of our car and the particles using time, velocity and yaw rate. Remember to check if the yaw rate is too small to avoid Number Overflow.
 
 For Step 3, let's look at how particles, acting as satellites around the car, evolves to estimate the locations of surrounding landmarks.
 
@@ -75,6 +75,8 @@ In the above approach, we assume that we use nearest neighbor seach for landmark
 (3) If there is an error in the car position estimation (-1 m to the right), this error will be introduced systematically to all particle measurements through the position transformation at the beginning of Step 3 (shift all particles to the right). Nearest neighbor does not take care of this pattern but search nearest landmarks for individual particles.
 
 (4) Complexity is O(mn) where m, n are the numbers of landmarks and particles.
+
+Now, another important thing we need to do in Step 3 is resampling particles based on their weights. This means we resample with replacement based on the particle weights. Accurate particles will survive and inaccurate ones must die (sorry!). So the number of particles still stay the same, but their positions will scatter off due to the Gaussian error we introduce in every prediction step in Step 1.
 
 ## Implementation
 The directory structure of this repository is as follows:
@@ -102,6 +104,9 @@ root
 
 You can find the inputs to the particle filter in the `data` directory, which is the global MAP data. Other data source like car control and car observation of particles are given by the simulator.
 
+Note that I used simple discrete distribution to resample the particles in Step 3. However, please feel free to implement the Resampling Wheel and compare.
 
+The performance is good as long as x and y-error are around 0.12 or less. My car in action here.
 
+![alt text][action]
 
