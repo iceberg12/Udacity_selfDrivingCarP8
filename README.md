@@ -5,6 +5,7 @@
 [particles]: ./images/particles.png
 [nn_pros_cons]: ./images/nn_pros_cons.png
 [action]: ./images/action.png
+
 ---
 
 ## Project Introduction
