@@ -1,5 +1,5 @@
-# Udacity Self-Driving Car Engineer Nanodegree
-## Kidnapped Vehicle Project
+# Kidnapped Vehicle Project
+[Udacity Self-Driving Car Engineer Nanodegree]
 
 [overview]: ./images/overview.png
 [particles]: ./images/particles.png
@@ -60,14 +60,18 @@ First, in order to relate particles to the global map, one needs to transform th
 
 In the above approach, we assume that we use nearest neighbor seach for landmarks. However, this method can have procs and cons, detailed in the following table. You can use the particle map above to make sense about these pros and cons.
 
-| Pros                          | Cons          |
-| -------------                 |:-------------:|
-| Easy to understand            | Not robust to high density of measurements or map landmarks   |
-| Easy to implement             | Not robust to sensor noise                                    |
-| Work well in many situation   | Not robust in position estimates                              |
-|                               | Inefficient to calculate                                      |
-|                               | Does not take different sensor uncertainties into account     |
+| Pros                          | Cons          | Note |
+| -------------                 |:--------------|:----:|
+| Easy to understand            | Not robust to high density of measurements or map landmarks   | (1) |
+| Easy to implement             | Not robust to sensor noise                                    | (2) |
+| Work well in many situation   | Not robust in position estimates                              | (3) |
+|                               | Inefficient to calculate                                      | (4) |
+|                               | Does not take different sensor uncertainties into account     | (5) |
 
+(1) Because one map landmark could be really close to multiple measurements (particles), thus it is unclear which particle corresponds to this map landmark.
+(2)(5) Sensor noise is in different direction, for example, vertical, nearest neighbor can pick a wrong particle for a landmark with this noise. The same thing can happen for Lidar measurement with high accuracy in bearing but less in range.
+(3) If there is an error in the car position estimation (-1 m to the right), this error will be introduced systematically to all particle measurements through the position transformation at the beginning of Step 3 (shift all particles to the right). Nearest neighbor does not take care of this pattern but search nearest landmarks for individual particles.
+(4) Complexity is O(mn) where m, n are the numbers of landmarks and particles.
 
 ## Implementation
 The directory structure of this repository is as follows:
