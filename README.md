@@ -1,18 +1,21 @@
 # Udacity Self-Driving Car Engineer Nanodegree
 ## Kidnapped Vehicle Project
 
+[overview]: ./images/overview.png
+[particles]: ./images/particles.png
+[nn_pros_cons]: ./images/nn_pros_cons.png
+
 ---
 
 ## Project Introduction
-Your robot has been kidnapped and transported to a new location! Luckily it has a map of this location, a (noisy) GPS estimate of its initial location, and lots of (noisy) sensor and control data.
+My robot has been kidnapped and transported to a new location! Luckily it has a map of this location, a (noisy) GPS estimate of its initial location, and lots of (noisy) sensor and control data.
 
-In this project you will implement a 2 dimensional particle filter in C++. Your particle filter will be given a map and some initial localization information (analogous to what a GPS would provide). At each time step your filter will also get observation and control data. 
+In this project I will implement a 2 dimensional particle filter in C++. My particle filter will be given a map and some initial localization information (analogous to what a GPS would provide). At each time step your filter will also get observation and control data. 
+- http://robots.stanford.edu/papers/thrun.pf-in-robotics-uai02.pdf
 
 This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
 
-This repository includes two files that can be used to set up and intall uWebSocketIO for either Linux or Mac systems. For windows you can use either Docker, VMware, or even Windows 10 Bash on Ubuntu to install uWebSocketIO.
-
-Once the install for uWebSocketIO is complete, the main program can be built and ran by doing the following from the project top directory.
+Command line to run the codes:
 
 ./clean.sh
 ./build.sh
@@ -34,8 +37,20 @@ If everything worked you should see something like the following output at the e
 ```
 Success! Your particle filter passed!
 ```
+## Logics
 
-## Theory
+The iterative steps to use the particle filter algorithm to track the car position within a global map from a noisy GPS position are described as followed
+
+![alt text][overview]
+
+1. Initialize the car position with noisy position data from the GPS. If already initialized, predict the vehicle's next state from previous (noiseless control) data.
+2. Receive landmarks observation data from the simulator.
+3. Update the particle weights and resample particles.
+4. Calculate and output the average weighted error of the particle filter over all time steps so far.
+
+Let's look at Steps 1, 2 and 3 in details.
+
+
 
 ## Implementation
 The directory structure of this repository is as follows:
@@ -61,7 +76,7 @@ root
     |   particle_filter.h
 ```
 
-You can find the inputs to the particle filter in the `data` directory. 
+You can find the inputs to the particle filter in the `data` directory, which is the global MAP data. Other data source like car control and car observation of particles are given by the simulator.
 
 
 
