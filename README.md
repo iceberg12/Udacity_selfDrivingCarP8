@@ -18,14 +18,15 @@ Once the install for uWebSocketIO is complete, the main program can be built and
 ./build.sh
 ./run.sh
 
-### The Map*
+### The Map
 Map data provided by 3D Mapping Solutions GmbH. `map_data.txt` includes the position of landmarks (in meters) on an arbitrary Cartesian coordinate system. Each row has three columns
 1. x position
 2. y position
 3. landmark id
 
-1. **Accuracy**: your particle filter should localize vehicle position and yaw to within the values specified in the parameters `max_translation_error` and `max_yaw_error` in `src/main.cpp`.
+### Performance Measurement
 
+1. **Accuracy**: your particle filter should localize vehicle position and yaw to within the values specified in the parameters `max_translation_error` and `max_yaw_error` in `src/main.cpp`.
 2. **Performance**: your particle filter should complete execution within the time of 100 seconds.
 
 If everything worked you should see something like the following output at the end:
