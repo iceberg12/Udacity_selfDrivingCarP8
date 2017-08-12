@@ -1,18 +1,21 @@
-# Udacity Self-Driving Car Engineer Nanodegree
-## Kidnapped Vehicle Project
+# Kidnapped Vehicle Project
+[Udacity Self-Driving Car Engineer Nanodegree]
+
+[overview]: ./images/overview.png
+[particles]: ./images/particles.png
+[nn_pros_cons]: ./images/nn_pros_cons.png
 
 ---
 
 ## Project Introduction
-Your robot has been kidnapped and transported to a new location! Luckily it has a map of this location, a (noisy) GPS estimate of its initial location, and lots of (noisy) sensor and control data.
+My robot has been kidnapped and transported to a new location! Luckily it has a map of this location, a (noisy) GPS estimate of its initial location, and lots of (noisy) sensor and control data.
 
-In this project you will implement a 2 dimensional particle filter in C++. Your particle filter will be given a map and some initial localization information (analogous to what a GPS would provide). At each time step your filter will also get observation and control data. 
+In this project I will implement a 2 dimensional particle filter in C++. My particle filter will be given a map and some initial localization information (analogous to what a GPS would provide). At each time step your filter will also get observation and control data. 
+- http://robots.stanford.edu/papers/thrun.pf-in-robotics-uai02.pdf
 
 This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
 
-This repository includes two files that can be used to set up and intall uWebSocketIO for either Linux or Mac systems. For windows you can use either Docker, VMware, or even Windows 10 Bash on Ubuntu to install uWebSocketIO.
-
-Once the install for uWebSocketIO is complete, the main program can be built and ran by doing the following from the project top directory.
+Command line to run the codes:
 
 ./clean.sh
 ./build.sh
@@ -34,8 +37,44 @@ If everything worked you should see something like the following output at the e
 ```
 Success! Your particle filter passed!
 ```
+## Logics
 
-## Theory
+The iterative steps to use the particle filter algorithm to track the car position within a global map from a noisy GPS position are described as followed
+
+![alt text][overview]
+
+1. Initialize the car position with noisy position data from the GPS. If already initialized, predict the vehicle's next state from previous (noiseless control) data.
+2. Receive landmarks observation data from the simulator.
+3. Update the particle weights and resample particles.
+4. Calculate and output the average weighted error of the particle filter over all time steps so far.
+
+Let's look at Steps 1 and 3 in details.
+
+In Step 1, beside initializing the car position, we also need to initialize the particles around the GPS-identified position with a predefined Gaussian distribution for x, y positions and orientation. Once initialized, we predict the next position using time, velocity and yaw rate. Remember to check if the yaw rate is too small to avoid Number Overflow.
+
+For Step 3, let's look at how particles, acting as satellites around the car, evolves to estimate the locations of surrounding landmarks.
+
+![alt text][particles]
+
+First, in order to relate particles to the global map, one needs to transform the particle positions observed by the car into particle positions in the global map. This can be done with coordinate transformation and rotation. Second, we want to know which landmark a particular particle is observing by finding the shortest distance from all landmarks to the particle. Certainly, if we know the sensor range of our car, we can narrow down the search to only localized landmarks near the car. Third, we want to ask ourselves, how much we can trust each particle. The weightage is done by comparing how accuracy (how close) each particle can estimate its landmarks.
+
+In the above approach, we assume that we use nearest neighbor seach for landmarks. However, this method can have procs and cons, detailed in the following table. You can use the particle map above to make sense about these pros and cons.
+
+| Pros                          | Cons          | Note |
+| -------------                 |:--------------|:----:|
+| Easy to understand            | Not robust to high density of measurements or map landmarks   | (1) |
+| Easy to implement             | Not robust to sensor noise                                    | (2) |
+| Work well in many situation   | Not robust in position estimates                              | (3) |
+|                               | Inefficient to calculate                                      | (4) |
+|                               | Does not take different sensor uncertainties into account     | (5) |
+
+(1) Because one map landmark could be really close to multiple measurements (particles), thus it is unclear which particle corresponds to this map landmark.
+
+(2)(5) Sensor noise is in different direction, for example, vertical, nearest neighbor can pick a wrong particle for a landmark with this noise. The same thing can happen for Lidar measurement with high accuracy in bearing but less in range.
+
+(3) If there is an error in the car position estimation (-1 m to the right), this error will be introduced systematically to all particle measurements through the position transformation at the beginning of Step 3 (shift all particles to the right). Nearest neighbor does not take care of this pattern but search nearest landmarks for individual particles.
+
+(4) Complexity is O(mn) where m, n are the numbers of landmarks and particles.
 
 ## Implementation
 The directory structure of this repository is as follows:
@@ -61,7 +100,7 @@ root
     |   particle_filter.h
 ```
 
-You can find the inputs to the particle filter in the `data` directory. 
+You can find the inputs to the particle filter in the `data` directory, which is the global MAP data. Other data source like car control and car observation of particles are given by the simulator.
 
 
 
