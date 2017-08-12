@@ -1,12 +1,10 @@
 # Kidnapped Vehicle Project
 [Udacity Self-Driving Car Engineer Nanodegree]
-
+---
 [overview]: ./images/overview.png
 [particles]: ./images/particles.png
 [nn_pros_cons]: ./images/nn_pros_cons.png
 [action]: ./images/action.png
-
----
 
 ## Project Introduction
 My robot has been kidnapped and transported to a new location! Luckily it has a map of this location, a (noisy) GPS estimate of its initial location, and lots of (noisy) sensor and control data.
